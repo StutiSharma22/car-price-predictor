@@ -2,17 +2,16 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Copy files
+# Copy project files
 COPY . .
 
-# Install dependencies
+# Install requirements
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Environment variable for Render PORT
-ENV PORT=8501
+# Set Render port
+ENV PORT=5000
 
-# Expose port
-EXPOSE 8501
+EXPOSE 5000
 
-# Start Streamlit using Render PORT
-CMD ["sh", "-c", "streamlit run app.py --server.port=$PORT --server.address=0.0.0.0"]
+# Start Flask app using Gunicorn (recommended)
+CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "app:app"]
